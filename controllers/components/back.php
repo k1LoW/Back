@@ -74,11 +74,15 @@ class BackComponent extends Object {
             $url = '/' . $redirect['url']['url'];
         } else {
             unset($redirect['url']);
+            $pass = empty($redirect['pass']) ? array() : $redirect['pass'];
             unset($redirect['pass']);
             unset($redirect['form']);
             $named = empty($redirect['named']) ? array() : $redirect['named'];
             unset($redirect['named']);
             $url = '/' . preg_replace('#' . Router::url('/') . '#', '', Router::url($redirect));
+            foreach ($pass as $value) {
+                $url .= '/' . $value;
+            }
             foreach ($named as $key => $value) {
                 $url .= '/' . $key . ':' . $value;
             }
