@@ -46,16 +46,18 @@ class BackComponentTest extends CakeTestCase {
 
     /**
      * endTest
-     * description
      *
-     * @param $arg
      */
     public function endTest($method = null){
         $this->__shutdownController();
         parent::endTest($method);
     }
 
-    function __loadController($params = array()) {
+    /**
+     * __loadController
+     *
+     */
+    private function __loadController($params = array()) {
         if ($this->Controller !== null) {
             $this->__shutdownController();
             unset($this->Controller);
@@ -83,6 +85,10 @@ class BackComponentTest extends CakeTestCase {
         $this->sessionBaseKey = "Back." . Inflector::underscore($Controller->name);
     }
 
+    /**
+     * __shutdownController
+     *
+     */
     function __shutdownController() {
         $this->Controller->shutdownProcess();
     }
@@ -90,6 +96,7 @@ class BackComponentTest extends CakeTestCase {
     /**
      * testPush
      *
+     * jpn:BackComponent::push()でページ表示履歴をセッション保存できる
      */
     public function testPush(){
         $this->__loadController(array(
