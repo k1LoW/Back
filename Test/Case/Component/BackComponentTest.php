@@ -97,6 +97,7 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -109,6 +110,8 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
+        unset($result[1]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -134,6 +137,7 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -146,6 +150,7 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -159,6 +164,8 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
+        unset($result[1]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -184,6 +191,7 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
@@ -197,6 +205,7 @@ class BackComponentTest extends CakeTestCase {
                                       ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
         $expected = array(array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,

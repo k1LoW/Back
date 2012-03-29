@@ -15,6 +15,7 @@ class BackComponent extends Component {
         $this->_set($settings);
         $this->Controller = $collection->getController();
         $this->params = $this->Controller->params->params;
+        $this->params['url'] = $this->Controller->params->url;
         parent::__construct($collection, $settings);
     }
 
@@ -74,15 +75,19 @@ class BackComponent extends Component {
         if ($redirect === $this->params) {
             $this->back();
         }
-        if (!empty($redirect['url']['url'])) {
-            $url = '/' . $redirect['url']['url'];
+        if (!empty($redirect['url'])) {
+            $url = '/' . $redirect['url'];
         } else {
             unset($redirect['url']);
+            $pass = empty($redirect['pass']) ? array() : $redirect['pass'];
             unset($redirect['pass']);
             unset($redirect['form']);
             $named = empty($redirect['named']) ? array() : $redirect['named'];
             unset($redirect['named']);
             $url = '/' . preg_replace('#' . Router::url('/') . '#', '', Router::url($redirect));
+            foreach ($pass as $value) {
+                $url .= '/' . $value;
+            }
             foreach ($named as $key => $value) {
                 $url .= '/' . $key . ':' . $value;
             }
