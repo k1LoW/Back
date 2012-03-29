@@ -1,16 +1,21 @@
 <?php
+App::uses('Component', 'Controller');
+class BackComponent extends Component {
 
-class BackComponent extends Object {
+    public $components = array('Session',
+                               'RequestHandler');
+    public $limit = 10;
+    public $default = '/';
 
-    var $components = array('Session',
-                            'RequestHandler');
-    var $limit = 10;
-    var $default = '/';
-
-    function initialize(&$controller,$settings = array()) {
+    /**
+     * __construct
+     *
+     */
+    public function __construct(ComponentCollection $collection, $settings = array()) {
         $this->_set($settings);
-        $this->_controller =& $controller;
-        $this->params = $controller->params;
+        $this->Controller = $collection->getController();
+        $this->params = $this->Controller->params->params;
+        parent::__construct($collection, $settings);
     }
 
     /**
@@ -18,7 +23,7 @@ class BackComponent extends Object {
      *
      * @param
      */
-    function beforeRender(){
+    public function beforeRender(){
         $this->push();
     }
 
@@ -26,7 +31,7 @@ class BackComponent extends Object {
      * push
      *
      */
-    function push(){
+    public function push(){
         if ($this->RequestHandler->isAjax()) {
             return;
         }
@@ -39,7 +44,6 @@ class BackComponent extends Object {
         if (empty($history)) {
             $history = array();
         }
-
         // Duplicate check
         if (count($history) === 0 || $history[count($history) - 1]  !== $this->params) {
             array_push($history, $this->params);
@@ -54,12 +58,12 @@ class BackComponent extends Object {
      * back
      *
      */
-    function back($back = 1){
+    public function back($back = 1){
         $this->Session->write('Back.start', $this->params);
         $history = $this->Session->read('Back.history');
         if (count($history) < $back + 1) {
             $this->Session->delete('Back.start');
-            $this->_controller->redirect($this->default);
+            $this->Controller->redirect($this->default);
             return;
         }
         array_pop($history);
@@ -83,6 +87,6 @@ class BackComponent extends Object {
                 $url .= '/' . $key . ':' . $value;
             }
         }
-        $this->_controller->redirect($url);
+        $this->Controller->redirect($url);
     }
 }

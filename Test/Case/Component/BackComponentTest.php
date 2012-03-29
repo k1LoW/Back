@@ -1,7 +1,8 @@
 <?php
 
-App::import('Controller', array('Component', 'Controller'), false);
-App::import('Component', 'Back.Back');
+App::uses('Controller', 'Controller');
+App::uses('Component', 'Back.Back');
+App::uses('Router', 'Routing');
 
 class BackComponentTestController extends Controller {
     var $name = 'BackComponentTest';
@@ -20,25 +21,38 @@ class BackComponentTest extends CakeTestCase {
     var $Controller = null;
     var $fixtures = array();
 
-    function start() {
-        parent::start();
-        ClassRegistry::config(array('table' => false));
+    function setUp() {
+        App::build();
+        Router::reload();
         $this->__loadController();
         $this->Controller->Back->Session->delete('Back');
     }
 
-    function end() {
+    function tearDown() {
+        App::build();
         $this->Controller->Back->Session->delete('Back');
         $this->__shutdownController();
-        parent::end();
     }
 
     /**
      * startTest
      *
      */
-    public function startTest(){
+    public function startTest($method = null){
+        parent::startTest($method);
+        $this->__loadController();
         $this->Controller->Back->Session->delete('Back');
+    }
+
+    /**
+     * endTest
+     * description
+     *
+     * @param $arg
+     */
+    public function endTest($method = null){
+        $this->__shutdownController();
+        parent::endTest($method);
     }
 
     function __loadController($params = array()) {
@@ -54,21 +68,23 @@ class BackComponentTest extends CakeTestCase {
         }
 
         $controllerName = 'BackComponent' . $controllerName . 'Controller';
-        $Controller = new $controllerName();
-        $Controller->params = array(
-                                    'controller' => $Controller->name,
-                                    'action' => 'test_action',
-                                    );
-        $Controller->params = array_merge($Controller->params, $params);
+        $Request = new CakeRequest(null, false);
+        $Controller = new $controllerName($Request);
+        $Request->addParams(array(
+                                  'controller' => $Controller->name,
+                                  'action' => 'test_action',
+                                  ))->addParams($params);
+        $Controller = new $controllerName($Request);
+
         $Controller->constructClasses();
-        $Controller->Component->initialize($Controller);
-        $Controller->beforeFilter();
-        $Controller->Component->startup($Controller);
-        $this->Controller =& $Controller;
+        $Controller->Components->trigger('initialize', array($Controller));
+        $this->Controller = $Controller;
+
+        $this->sessionBaseKey = "Back." . Inflector::underscore($Controller->name);
     }
 
     function __shutdownController() {
-        $this->Controller->Component->shutdown($this->Controller);
+        $this->Controller->shutdownProcess();
     }
 
     /**
@@ -82,6 +98,7 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ));
@@ -93,10 +110,12 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ),
                           array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action2',
                                 ),
@@ -116,6 +135,7 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ));
@@ -127,6 +147,7 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ),
@@ -139,10 +160,12 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ),
                           array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action2',
                                 ),
@@ -162,6 +185,7 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ));
@@ -174,6 +198,7 @@ class BackComponentTest extends CakeTestCase {
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         $expected = array(array(
+                                'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
                                 ));
