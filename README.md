@@ -1,1 +1,1 @@
-# Sessoin base `history back' plugin for CakePHP #
+# Session base `history back' plugin for CakePHP #
