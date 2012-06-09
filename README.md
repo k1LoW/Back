@@ -2,7 +2,7 @@
 
 ## Install
 
-First, Install 'DebugKitShortcut' by [recipe.php](https://github.com/k1LoW/recipe) , and set `CakePlugin::load('Back');`
+First, Install 'Back' by [recipe.php](https://github.com/k1LoW/recipe) , and set `CakePlugin::load('Back');`
 
 Second, add the following code in AppController.php.
 
