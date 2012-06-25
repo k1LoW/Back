@@ -109,6 +109,8 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ));
         $this->assertIdentical($result, $expected);
 
@@ -123,11 +125,15 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ),
                           array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action2',
+                                'named' => array(),
+                                'pass' => array(),
                                 ),
                           );
         $this->assertIdentical($result, $expected);
@@ -149,6 +155,8 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ));
         $this->assertIdentical($result, $expected);
 
@@ -162,6 +170,8 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ),
                           );
         $this->assertIdentical($result, $expected);
@@ -177,11 +187,15 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ),
                           array(
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action2',
+                                'named' => array(),
+                                'pass' => array(),
                                 ),
                           );
         $this->assertIdentical($result, $expected);
@@ -203,6 +217,8 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ));
         $this->assertIdentical($result, $expected);
 
@@ -217,6 +233,8 @@ class BackComponentTest extends CakeTestCase {
                                 'plugin' => null,
                                 'controller' => $this->Controller->name,
                                 'action' => 'test_action',
+                                'named' => array(),
+                                'pass' => array(),
                                 ));
         $this->assertIdentical($result, $expected);
     }
