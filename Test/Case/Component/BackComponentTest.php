@@ -2,8 +2,9 @@
 
 App::uses('Controller', 'Controller');
 App::uses('Component', 'Back.Back');
+App::uses('SessionComponent', 'Controller/Component');
 App::uses('Router', 'Routing');
-
+session_start(); // http://mindthecode.com/using-sessions-in-phpunit-tests-with-cakephp/
 class BackComponentTestController extends Controller {
     var $name = 'BackComponentTest';
     var $components = array('Back.Back');
@@ -58,6 +59,8 @@ class BackComponentTest extends CakeTestCase {
      *
      */
     private function __loadController($params = array()) {
+        $this->ComponentCollection = new ComponentCollection();
+
         if ($this->Controller !== null) {
             $this->__shutdownController();
             unset($this->Controller);
@@ -81,7 +84,6 @@ class BackComponentTest extends CakeTestCase {
         $Controller->constructClasses();
         $Controller->Components->trigger('initialize', array($Controller));
         $this->Controller = $Controller;
-
         $this->sessionBaseKey = "Back." . Inflector::underscore($Controller->name);
     }
 
