@@ -19,7 +19,7 @@ class BackComponentTestController extends Controller {
 
     public $redirectTo  =  null;
 
-    public function redirect($url) {
+    public function redirect($url, $state = null, $exit = true) {
         $this->redirectTo = Router::url($url);
         return true;
     }

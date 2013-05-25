@@ -30,7 +30,7 @@ class BackComponent extends Component {
      *
      * @param
      */
-    public function beforeRender(){
+    public function beforeRender(Controller $controller){
         $this->push();
     }
 
