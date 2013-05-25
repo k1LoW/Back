@@ -2,16 +2,22 @@
 App::uses('Component', 'Controller');
 class BackComponent extends Component {
 
-    public $components = array('Session',
-                               'RequestHandler');
+    public $components = array(
+        'Session',
+        'RequestHandler'
+    );
     public $limit = 10;
-    public $default = '/';
+    private $default = array(
+        'defaultRedirect' => '/',
+        'blacklist' => array()
+    );
 
     /**
      * __construct
      *
      */
     public function __construct(ComponentCollection $collection, $settings = array()) {
+        $this->settings = Set::merge($this->default, $this->settings);
         $this->_set($settings);
         $this->Controller = $collection->getController();
         $this->params = $this->Controller->params->params;
@@ -36,6 +42,18 @@ class BackComponent extends Component {
         if ($this->RequestHandler->isAjax()) {
             return;
         }
+        // Blacklist check
+        foreach ($this->settings['blacklist'] as $list) {
+            foreach ($list as $key => $value) {
+                if (empty($this->params[$key])) {
+                    continue;
+                }
+                if ($this->params[$key] === $value) {
+                    return;
+                }
+            }
+        }
+
         if ($this->Session->check('Back.start')
             && $this->Session->read('Back.start') === $this->params) {
             $this->back();
@@ -64,7 +82,7 @@ class BackComponent extends Component {
         $history = $this->Session->read('Back.history');
         if (count($history) < $back + 1) {
             $this->Session->delete('Back.start');
-            $this->Controller->redirect($this->default);
+            $this->Controller->redirect($this->settings['defaultRedirect']);
             return;
         }
         array_pop($history);
@@ -93,5 +111,14 @@ class BackComponent extends Component {
             }
         }
         $this->Controller->redirect($url);
+    }
+
+    /**
+     * clear
+     *
+     *
+     */
+    public function clear(){
+        $this->Session->delete('Back');
     }
 }

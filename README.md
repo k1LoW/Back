@@ -10,7 +10,7 @@ Second, add the following code in AppController.php.
 
     <?php
        class AppController extends Controller {
-           var $components = array('Back.Back');
+           public $components = array('Back.Back');
        }
 
 And see test case!

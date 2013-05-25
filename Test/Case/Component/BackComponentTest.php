@@ -6,30 +6,37 @@ App::uses('SessionComponent', 'Controller/Component');
 App::uses('Router', 'Routing');
 session_start(); // http://mindthecode.com/using-sessions-in-phpunit-tests-with-cakephp/
 class BackComponentTestController extends Controller {
-    var $name = 'BackComponentTest';
-    var $components = array('Back.Back');
-    var $uses = array();
+    public $name = 'BackComponentTest';
+    public $components = array(
+        'Back.Back' => array(
+            'blacklist' => array(
+                array('plugin' => 'blacklist_plugin'),
+                array('action' => 'blacklist_action'),
+                array('action' => 'blacklist_controller'),
+            )
+        ));
+    public $uses = array();
 
-    var $redirectTo  =  null;
+    public $redirectTo  =  null;
 
-    function redirect($url) {
+    public function redirect($url) {
         $this->redirectTo = Router::url($url);
         return true;
     }
 }
 
 class BackComponentTest extends CakeTestCase {
-    var $Controller = null;
-    var $fixtures = array();
+    public $Controller = null;
+    public $fixtures = array();
 
-    function setUp() {
+    public function setUp() {
         App::build();
         Router::reload();
         $this->__loadController();
         $this->Controller->Back->Session->delete('Back');
     }
 
-    function tearDown() {
+    public function tearDown() {
         App::build();
         $this->Controller->Back->Session->delete('Back');
         $this->__shutdownController();
@@ -76,9 +83,9 @@ class BackComponentTest extends CakeTestCase {
         $Request = new CakeRequest(null, false);
         $Controller = new $controllerName($Request);
         $Request->addParams(array(
-                                  'controller' => $Controller->name,
-                                  'action' => 'test_action',
-                                  ))->addParams($params);
+                'controller' => $Controller->name,
+                'action' => 'test_action',
+            ))->addParams($params);
         $Controller = new $controllerName($Request);
 
         $Controller->constructClasses();
@@ -102,42 +109,42 @@ class BackComponentTest extends CakeTestCase {
      */
     public function testPush(){
         $this->__loadController(array(
-                                      'action' => 'test_action',
-                                      ));
+                'action' => 'test_action',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ));
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ));
         $this->assertIdentical($result, $expected);
 
         $this->__loadController(array(
-                                      'action' => 'test_action2',
-                                      ));
+                'action' => 'test_action2',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         unset($result[1]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ),
-                          array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action2',
-                                'named' => array(),
-                                'pass' => array(),
-                                ),
-                          );
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ),
+            array(
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action2',
+                'named' => array(),
+                'pass' => array(),
+            ),
+        );
         $this->assertIdentical($result, $expected);
     }
 
@@ -148,58 +155,58 @@ class BackComponentTest extends CakeTestCase {
      */
     public function testDuplicatePush(){
         $this->__loadController(array(
-                                      'action' => 'test_action',
-                                      ));
+                'action' => 'test_action',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ));
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ));
         $this->assertIdentical($result, $expected);
 
         $this->__loadController(array(
-                                      'action' => 'test_action',
-                                      ));
+                'action' => 'test_action',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ),
-                          );
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ),
+        );
         $this->assertIdentical($result, $expected);
 
         $this->__loadController(array(
-                                      'action' => 'test_action2',
-                                      ));
+                'action' => 'test_action2',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         unset($result[1]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ),
-                          array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action2',
-                                'named' => array(),
-                                'pass' => array(),
-                                ),
-                          );
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ),
+            array(
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action2',
+                'named' => array(),
+                'pass' => array(),
+            ),
+        );
         $this->assertIdentical($result, $expected);
     }
 
@@ -210,34 +217,90 @@ class BackComponentTest extends CakeTestCase {
      */
     public function testAjaxPush(){
         $this->__loadController(array(
-                                      'action' => 'test_action',
-                                      ));
+                'action' => 'test_action',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ));
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ));
         $this->assertIdentical($result, $expected);
 
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $this->__loadController(array(
-                                      'action' => 'test_ajax',
-                                      ));
+                'action' => 'test_ajax',
+            ));
         $this->Controller->Back->push();
         $result = $this->Controller->Back->Session->read('Back.history');
         unset($result[0]['url']);
         $expected = array(array(
-                                'plugin' => null,
-                                'controller' => $this->Controller->name,
-                                'action' => 'test_action',
-                                'named' => array(),
-                                'pass' => array(),
-                                ));
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ));
+        $this->assertIdentical($result, $expected);
+    }
+
+    /**
+     * testBlacklistPush
+     *
+     * jpn: blacklistにマッチするものは履歴に加えない
+     *
+     */
+    public function testBlacklistPush(){
+        $this->__loadController(array(
+                'action' => 'test_action',
+            ));
+        $this->Controller->Back->push();
+        $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
+        $expected = array(array(
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ));
+        $this->assertIdentical($result, $expected);
+
+        $this->__loadController(array(
+                'action' => 'blacklist_action',
+            ));
+        $this->Controller->Back->push();
+        $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
+        $expected = array(array(
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ),
+        );
+        $this->assertIdentical($result, $expected);
+
+        $this->__loadController(array(
+                'plugin' => 'blacklist_plugin',
+                'action' => 'test_action',
+            ));
+        $this->Controller->Back->push();
+        $result = $this->Controller->Back->Session->read('Back.history');
+        unset($result[0]['url']);
+        $expected = array(array(
+                'plugin' => null,
+                'controller' => $this->Controller->name,
+                'action' => 'test_action',
+                'named' => array(),
+                'pass' => array(),
+            ),
+        );
         $this->assertIdentical($result, $expected);
     }
 
@@ -247,12 +310,12 @@ class BackComponentTest extends CakeTestCase {
      */
     public function testBack(){
         $this->__loadController(array(
-                                      'action' => 'test_action',
-                                      ));
+                'action' => 'test_action',
+            ));
         $this->Controller->Back->push();
         $this->__loadController(array(
-                                      'action' => 'test_action2',
-                                      ));
+                'action' => 'test_action2',
+            ));
         $this->Controller->Back->push();
 
         $this->Controller->Back->back();
